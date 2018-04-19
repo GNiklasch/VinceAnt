@@ -1,0 +1,25 @@
+To get from VinceAnt.js to VinceAnt-golfed.js:
+
+(1) Using your favorite text editor, manually remove all /* ... */
+block comments and the debugme() function definition at the end,
+
+(2) save the result to an intermediate file,
+
+(3) and run this through the bin/minify-VinceAnt.pl filter.
+
+This last step will remove all //-comments, one-line debugme() calls,
+and indentation and much other whitespace including many line endings,
+and replace all variable and function identifiers with abbreviations.
+The filter rules will need updating when significant amounts of new
+identifiers are added to the .js source.
+
+(This isn't strictly necessary -- VinceAnt.js comfortably fits within
+the PPCG answer size limit -- but it prevents cluttering up PPCG with
+unnecessary formatting / linebreaks / commentary.)
+
+(The answer size limit on https://codegolf.stackexchange.com/ is 65536
+characters, which is already larger than the general StackExchange default.
+Bear in mind though that code blocks are marked-down by indenting every
+line with 4 spaces, which would add back several KB to the code size if
+the Perl script didn't run together many shortish lines into a much
+smaller number of rather long lines.)
