@@ -28,11 +28,9 @@ var DEBUGME = [false, false, false, false, false, false];
 var THRESHOLDC = 1; // transition from trail-guided to lightspeed scrambling
 var THRESHOLD1 = 15; // ### tbd
 
-// We lock in queen's hoarded food  (don't expend it on new workers,
-// except in dire emergencies)  when the current amount modulo
-// RATCHET_MODULUS equals RATCHET_RESIDUE:
+// A ratchet mechanism suppresses spawning for selected residue classes
+// modulo RATCHET_MODULUS.
 var RATCHET_MODULUS = 7;
-var RATCHET_RESIDUE = 4;
 
 // -- Physical colors: --
 // These could be permuted without breaking anything else below
