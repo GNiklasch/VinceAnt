@@ -26,11 +26,23 @@ var DEBUGME = [false, false, false, false, false, false];
 
 // -- Food hoarding thresholds (tunables): --
 var THRESHOLDC = 1; // transition from trail-guided to lightspeed scrambling
-var THRESHOLD1 = 15; // ### tbd
+// thresholds for spawning painters, per type
+var THRESHOLDP = [0, 0, 0, 0, 0, 0];
+THRESHOLDP[ANT_MARK] = 19;
+THRESHOLDP[ANT_GEORGES] = 17;
+THRESHOLDP[ANT_WILLIAM] = 15;
 
 // A ratchet mechanism suppresses spawning for selected residue classes
 // modulo RATCHET_MODULUS.
-var RATCHET_MODULUS = 7;
+var RATCHET_MODULUS = 31;
+// preferred child types per residue class:
+var SPONSORED_ARTIST_TYPE =
+    [0, 0, ANT_MARK, ANT_GEORGES, ANT_WILLIAM, ANT_WILLIAM,
+     0, ANT_GEORGES, 0, 0, ANT_WILLIAM, ANT_MARK,
+     0, 0, ANT_GEORGES, ANT_MARK, 0, 0,
+     ANT_WILLIAM, ANT_GEORGES, 0, ANT_MARK, 0, 0,
+     ANT_WILLIAM, ANT_MARK, ANT_GEORGES, 0, ANT_MARK, ANT_GEORGES,
+     0];
 
 // -- Physical colors: --
 // These could be permuted without breaking anything else below
@@ -457,33 +469,21 @@ function runQueenLightspeedStrategy() {
     // Assert:  compass is set, navigator at CCW[compass+1].
     debugme("Lightspeed queen...");
     if ((specTotal[LCL_CLEAR] <= 2) &&
-	(myFood >= THRESHOLD1) && (foesTotal == 0)) {
-	// #### randomize this further when we have lots of food
+	(myFood > 1) && (foesTotal == 0)) {
+	// #### randomize this further when we have lots of food?
 	debugme("Time for some repainting...");
-	switch (myFood % RATCHET_MODULUS) {
-	case ANT_MARK:
-	    if ((adjFriends[ANT_MARK] == 0) &&
-		destOK[CCW[compass+6]] &&
-		(view[CCW[compass+6]].food == 0)) {
-		return {cell:CCW[compass+6], type:ANT_MARK};
+	var artist = SPONSORED_ARTIST_TYPE[myFood % RATCHET_MODULUS];
+	if ((artist != 0) &&
+	    (myFood >= THRESHOLDP[artist]) &&
+	    (adjFriends[artist] <= 1)) {
+	    var tc = [5, 6, 4, 3];
+	    for (var i = 0; i < tc.length; i++) {
+		var c = CCW[compass+tc[i]];
+		if (destOK[c] &&
+		(view[c].food == 0)) {
+		    return {cell:c, type:artist};
+		}
 	    }
-	    break;
-	case ANT_GEORGES:
-	    if ((adjFriends[ANT_GEORGES] == 0) &&
-		destOK[CCW[compass+5]] &&
-		(view[CCW[compass+5]].food == 0)) {
-		return {cell:CCW[compass+5], type:ANT_GEORGES};
-	    }
-	    break;
-	case ANT_WILLIAM:
-	    if ((adjFriends[ANT_WILLIAM] == 0) &&
-		destOK[CCW[compass+6]] &&
-		(view[CCW[compass+6]].food == 0)) {
-		return {cell:CCW[compass+6], type:ANT_WILLIAM};
-	    }
-	    break;
-	default:
-	    break;
 	}
     }
     if ((foesTotal == 0) && (friendsTotal == 1)) {

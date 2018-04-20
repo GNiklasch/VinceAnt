@@ -11,6 +11,7 @@ while (<>) {
     s/^.*(DEBUGME|debugme).*;$//g; # needs manual work
     s/THRESHOLD/TH/g;
     s/RATCHET_MODULUS/RM/g;
+    s/SPONSORED_ARTIST_TYPE/SPDAT/g;
     s/COL_WHITE/PW/g;
     s/COL_YELLOW/PY/g;
     s/COL_PURPLE/PP/g;
