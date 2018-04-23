@@ -34,15 +34,12 @@ THRESHOLDP[ANT_WILLIAM] = 15;
 
 // A ratchet mechanism suppresses spawning for selected residue classes
 // modulo RATCHET_MODULUS.
-var RATCHET_MODULUS = 31;
+var RATCHET_MODULUS = 15;
 // preferred child types per residue class:
 var SPONSORED_ARTIST_TYPE =
-    [0, 0, ANT_MARK, ANT_GEORGES, ANT_WILLIAM, ANT_WILLIAM,
-     0, ANT_GEORGES, 0, 0, ANT_WILLIAM, ANT_MARK,
-     0, 0, ANT_GEORGES, ANT_MARK, 0, 0,
-     ANT_WILLIAM, ANT_GEORGES, 0, ANT_MARK, 0, 0,
-     ANT_WILLIAM, ANT_MARK, ANT_GEORGES, 0, ANT_MARK, ANT_GEORGES,
-     0];
+    [0, ANT_MARK, ANT_GEORGES, 0, ANT_WILLIAM,
+     0, ANT_GEORGES, ANT_WILLIAM, 0, ANT_MARK,
+     0, ANT_WILLIAM, ANT_MARK, 0, ANT_GEORGES];
 
 // -- Physical colors: --
 // These could be permuted without breaking anything else below
