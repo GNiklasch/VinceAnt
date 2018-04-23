@@ -61,7 +61,7 @@ var LCL_TRAIL = COL_YELLOW;
 
 // Lightspeed communications when the navigator sees something the queen
 // cannot see:
-var LCL_LS_FOOD = COL_PURPLE;
+var LCL_LS_FOOD = COL_GREEN;
 
 // #### tbd
 
