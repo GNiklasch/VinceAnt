@@ -317,6 +317,10 @@ function runMarkStrategies() {
 	} else {
 	    return CELL_NOP;
 	}
+    } else if ((myFood > 0) &&
+	       (adjFriends[ANT_QUEEN] + adjFriends[ANT_NAVIGATOR] > 0)) {
+	// Linger in the hope of delivering our food.
+	return CELL_NOP;
     } else if ((myFood == 0) && (foodTotal > 0)) {
 	return (runPainterEatingStrategy());
     } else if (adjFriends[ANT_GEORGES] + adjFriends[ANT_WILLIAM] > 1) {
@@ -343,6 +347,10 @@ function runGeorgesStrategies() {
 	} else {
 	    return CELL_NOP;
 	}
+    } else if ((myFood > 0) &&
+	       (adjFriends[ANT_QUEEN] + adjFriends[ANT_NAVIGATOR] > 0)) {
+	// Linger in the hope of delivering our food.
+	return CELL_NOP;
     } else if ((myFood == 0) && (foodTotal > 0)) {
 	return (runPainterEatingStrategy());
     } else if (adjFriends[ANT_MARK] + adjFriends[ANT_WILLIAM] > 1) {
@@ -369,6 +377,10 @@ function runWilliamStrategies() {
 	} else {
 	    return CELL_NOP;
 	}
+    } else if ((myFood > 0) &&
+	       (adjFriends[ANT_QUEEN] + adjFriends[ANT_NAVIGATOR] > 0)) {
+	// Linger in the hope of delivering our food.
+	return CELL_NOP;
     } else if ((myFood == 0) && (foodTotal > 0)) {
 	return (runPainterEatingStrategy());
     } else if (adjFriends[ANT_MARK] + adjFriends[ANT_GEORGES] > 1) {
@@ -563,6 +575,14 @@ function runNavLightspeedStrategy() {
 	       !view[CCW[compass+2]].ant.friend) {
 	// An enemy is trailing our queen.  Again, force a right turn.
 	return {cell:POS_CENTER, color:LCL_LS_FOOD};
+    } else if ((friendsTotal > 1) &&
+	       ((view[CCW[compass+6]].ant && view[CCW[compass+6]].ant.friend &&
+		 (view[CCW[compass+6]].ant.food > 0)) ||
+		(view[CCW[compass+5]].ant && view[CCW[compass+5]].ant.friend &&
+		 (view[CCW[compass+5]].ant.food > 0)))) {
+	// A laden friend is in view and the queen can't see him.
+	// Again, force a right turn.
+	return {cell:POS_CENTER, color:LCL_LS_FOOD};
     } else {
 	// The navigator at this point can't see far in the direction we
 	// want to travel.  Some praying is involved...
@@ -633,8 +653,25 @@ function runNavRecoveryStrategy() {
 // An orphaned navigator will turn into painter Paul.
 
 function runPaulPaintingStrategy() {
-    // Painters of each kind prefer to be solitary...
-    if (adjFriends[myType] > 0) {
+    // Paul needs to shy away from laden friends since these would linger
+    // around an ANT_NAVIGATOR in the hope of being able to deliver food.
+    if (adjLadenFriends[ANT_MARK] + adjLadenFriends[ANT_GEORGES] +
+	adjLadenFriends[ANT_WILLIAM] > 0) {
+	for (var i = 0; i < TOT_NBRS; i++) {
+	    if (view[CCW[i]].ant && view[CCW[i]].ant.friend &&
+		(view[CCW[i]].ant.food > 0)) {
+		if (destOK[CCW[i+4]]) {
+		    return {cell:CCW[i+4]};
+		} else if (destOK[CCW[i+3]]) {
+		    return {cell:CCW[i+3]};
+		} else if (destOK[CCW[i+5]]) {
+		    return {cell:CCW[i+5]};
+		}
+	    }
+	}
+	// If that didn't work, fall through to default processing.
+    } else if (adjFriends[myType] > 0) {
+	// Paul also avoids other navigators.
 	return (runSolitaryPainterTactic());
     }
     return (runPaulPaintingTactic());
