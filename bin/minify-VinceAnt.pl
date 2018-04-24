@@ -62,6 +62,7 @@ while (<>) {
     s/runQueenConfusedStrategy/rQCSy/g;
     s/runNavLightspeedStrategy/rSLSy/g;
     s/runPainterEatingStrategy/rPEgSy/g;
+    s/runPainterMatchingStrategy/rPMgSy/g;
     s/runPaulPaintingStrategy/rPPgSy/g;
     s/runClaudePaintingStrategy/rCPgSy/g;
     s/runMarkPaintingStrategy/rMPgSy/g;

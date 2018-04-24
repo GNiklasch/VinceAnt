@@ -344,8 +344,9 @@ function runMarkStrategies() {
 	}
     } else if ((myFood == 0) && (foodTotal > 0)) {
 	return (runPainterEatingStrategy());
-    } else if ((adjFriends[ANT_GEORGES] == 1) &&
-	       (adjFriends[ANT_WILLIAM] == 0)) {
+    } else if (adjFriends[ANT_GEORGES] + adjFriends[ANT_WILLIAM] > 1) {
+	return (runPainterMatchingStrategy());
+    } else if (adjFriends[ANT_GEORGES] == 1) {
 	return (runClaudePaintingStrategy());
     } else {
 	return (runMarkPaintingStrategy());
@@ -369,8 +370,9 @@ function runGeorgesStrategies() {
 	}
     } else if ((myFood == 0) && (foodTotal > 0)) {
 	return (runPainterEatingStrategy());
-    } else if ((adjFriends[ANT_MARK] == 1) &&
-	       (adjFriends[ANT_WILLIAM] == 0)) {
+    } else if (adjFriends[ANT_MARK] + adjFriends[ANT_WILLIAM] > 1) {
+	return (runPainterMatchingStrategy());
+    } else if (adjFriends[ANT_MARK] == 1) {
 	return (runJeanPaintingStrategy());
     } else {
 	return (runGeorgesPaintingStrategy());
@@ -394,6 +396,8 @@ function runWilliamStrategies() {
 	}
     } else if ((myFood == 0) && (foodTotal > 0)) {
 	return (runPainterEatingStrategy());
+    } else if (adjFriends[ANT_MARK] + adjFriends[ANT_GEORGES] > 1) {
+	return (runPainterMatchingStrategy());
     } else {
 	// #### future cooperative cases...
 	return (runWilliamPaintingStrategy());
@@ -691,6 +695,41 @@ function runPainterEatingStrategy() {
 	}
     }
     return CELL_NOP; // notreached
+}
+
+function runPainterMatchingStrategy() {
+    // Assert:  multiple friendly painters of types other than myType are in
+    // view.  Try to pick one to work with  (if possible).
+    for (var i = 0; i < TOTAL_NBRS; i+=2) {
+	if (view[CCW[i]].ant && view[CCW[i]].ant.friend &&
+	    (view[CCW[i]].ant.type != myType)) {
+	    if (destOK[CCW[i+1]] && !view[CCW[i+7]].ant &&
+		!view[CCW[i+2]].ant && !view[CCW[i+3]].ant) {
+		return {cell:CCW[i+1]};
+	    } else if (destOK[CCW[i+7]] && !view[CCW[i+1]].ant &&
+		       !view[CCW[i+6]].ant && !view[CCW[i+5]].ant) {
+		return {cell:CCW[i+7]};
+	    }
+	}
+    }
+    for (var i = 1; i < TOTAL_NBRS; i+=2) {
+	if (view[CCW[i]].ant && view[CCW[i]].ant.friend &&
+	    (view[CCW[i]].ant.type != myType)) {
+	    if (destOK[CCW[i-1]] && !view[CCW[i+6]].ant) {
+		return {cell:CCW[i-1]};
+	    } else if (destOK[CCW[i+1]] && !view[CCW[i+2]].ant) {
+		return {cell:CCW[i+1]};
+	    }
+	}
+    }
+    // Too crowded... find a free cell somewhere to tiptoe to, if possible.
+    for (var i = 0; i < TOTAL_NBRS; i++) {
+	if (destOK[CCW[i]]) {
+	    return {cell:CCW[i]};
+	}
+    }
+    // Completely hemmed in.  Paint something at random.
+    return {cell:POS_CENTER, color:view[CCW[0]].color}; // fallback
 }
 
 // ---- Decision tree: fourth (tactical) level ----
