@@ -316,9 +316,14 @@ function runQueenStrategies() {
 
 function runNavStrategies() {
     if (adjFriends[ANT_QUEEN] > 0) {
-	// Assert:  compass is set, queen and myself mutually at CCW[compass+1]
-	// (facing in opposite directions).
-	return (runNavLightspeedStrategy());
+	// Assert:  compass is set.
+	if (myQueenPos == 1) {
+	    // Assert:  compass is set, queen and myself mutually at
+	    // CCW[compass+1]  (facing in opposite directions).
+	    return (runNavLightspeedStrategy());
+	} else {
+	    return (runNavRecoveryStrategy());
+	}
     } else if ((myFood == 0) && (foodTotal > 0)) {
 	return (runPainterEatingStrategy());
     } else {
@@ -559,6 +564,59 @@ function runNavLightspeedStrategy() {
 	}
     }
     return CELL_NOP; // fallback
+}
+
+function runNavRecoveryStrategy() {
+    // Assert:  compass is set, queen and myself abnormally mutually
+    // at CCW[compass]  (facing in opposite directions).
+    // Try to correct this, unless another navigator is already there.
+    if (view[CCW[compass+1]].ant && view[CCW[compass+1]].ant.friend &&
+	(view[CCW[compass+1]].ant.type == myType)) {
+	if (destOK[CCW[compass+5]]) {
+	    return {cell:CCW[compass+5]};
+	} else if (destOK[CCW[compass+6]]) {
+	    return {cell:CCW[compass+6]};
+	} else if (destOK[CCW[compass+3]]) {
+	    return {cell:CCW[compass+3]};
+	} else if (destOK[CCW[compass+2]]) {
+	    return {cell:CCW[compass+2]};
+	} else {
+	    return CELL_NOP;
+	}
+    } else if (view[CCW[compass+7]].ant &&
+	       view[CCW[compass+7]].ant.friend &&
+	       (view[CCW[compass+7]].ant.type == myType)) {
+	if (destOK[CCW[compass+3]]) {
+	    return {cell:CCW[compass+3]};
+	} else if (destOK[CCW[compass+4]]) {
+	    return {cell:CCW[compass+4]};
+	} else if (destOK[CCW[compass+2]]) {
+	    return {cell:CCW[compass+2]};
+	} else if (destOK[CCW[compass+5]]) {
+	    return {cell:CCW[compass+5]};
+	} else {
+	    return CELL_NOP;
+	}
+    } else if (destOK[CCW[compass+1]]) {
+	// This case and the following puts ourselves in the right place.
+	return {cell:CCW[compass+1]};
+    } else if (destOK[CCW[compass+7]]) {
+	return {cell:CCW[compass+7]};
+    } else if (destOK[CCW[compass+4]]) {
+	// The right place is otherwise occupied - step away.
+	return {cell:CCW[compass+4]};
+    } else if (destOK[CCW[compass+3]]) {
+	return {cell:CCW[compass+3]};
+    } else if (destOK[CCW[compass+5]]) {
+	return {cell:CCW[compass+5]};
+    } else if (destOK[CCW[compass+2]]) {
+	return {cell:CCW[compass+2]};
+    } else if (destOK[CCW[compass+6]]) {
+	return {cell:CCW[compass+6]};
+    } else {
+	// hemmed in
+	return CELL_NOP;
+    }
 }
 
 // Individual painters' strategies:
