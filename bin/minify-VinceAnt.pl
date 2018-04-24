@@ -59,6 +59,7 @@ while (<>) {
 
     s/runQueenScramblingStrategy/rQScrSy/g;
     s/runQueenLightspeedStrategy/rQLsSy/g;
+    s/runQueenChooseNavigatorStrategy/rQCNSy/g;
     s/runQueenConfusedStrategy/rQCSy/g;
     s/runNavLightspeedStrategy/rSLSy/g;
     s/runNavRecoveryStrategy/rNRSy/g;

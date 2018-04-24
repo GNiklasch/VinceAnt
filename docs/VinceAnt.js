@@ -279,37 +279,7 @@ function runQueenStrategies() {
 	}
 	break; // notreached
     default:
-	// this should be a Strategy...
-	for (var i = 0; i < TOTAL_NBRS; i++) {
-	    var cell = view[CCW[i]];
-	    if (cell.ant && cell.ant.friend &&
-		cell.ant.type == ANT_NAVIGATOR) {
-		// found one, where are the others...?
-		if (i & 1) {
-		    // in the correct place, too
-		    if (destOK[CCW[i-1]]) {
-			return {cell:CCW[i-1]};
-		    } else if (destOK[CCW[i+1]]) {
-			return {cell:CCW[i+1]};
-		    } else if (destOK[CCW[i+4]]) {
-			return {cell:CCW[i+4]};
-		    } else {
-			return CELL_NOP;
-		    }
-		} else {
-		    if (destOK[CCW[i+7]]) {
-			return {cell:CCW[i+7]};
-		    } else if (destOK[CCW[i+1]]) {
-			return {cell:CCW[i+1]};
-		    } else if (destOK[CCW[i+4]]) {
-			return {cell:CCW[i+4]};
-		    } else {
-			return CELL_NOP;
-		    }
-		}
-	    }
-	}
-	return (runQueenConfusedStrategy());
+	return (runQueenChooseNavigatorStrategy());
     }
     return CELL_NOP; // notreached
 }
@@ -524,6 +494,46 @@ function runQueenLightspeedStrategy() {
     } else {
 	return CELL_NOP; // no good options left
     }
+}
+
+function runQueenChooseNavigatorStrategy() {
+    // Assert:  More than one friendly ANT_NAVIGATOR in view;
+    // compass has not been set.
+    for (var i = 0; i < TOTAL_NBRS; i++) {
+	var cell = view[CCW[i]];
+	if (cell.ant && cell.ant.friend &&
+	    cell.ant.type == ANT_NAVIGATOR) {
+	    // found one... where exactly?
+	    if (i & 1) {
+		// ...in the correct place, too.  Try to keep adjacent,
+		// and if that isn't possible, jump ship and step as far
+		// away as possible  (if possible).
+		if (destOK[CCW[i-1]]) {
+		    return {cell:CCW[i-1]};
+		} else if (destOK[CCW[i+1]]) {
+		    return {cell:CCW[i+1]};
+		} else if (destOK[CCW[i+4]]) {
+		    return {cell:CCW[i+4]};
+		} else {
+		    return CELL_NOP;
+		}
+	    } else {
+		// ...diagonally adjacent.  Try to cure that, or step away,
+		// or let the navigators sort themselves out if all else
+		// fails.
+		if (destOK[CCW[i+7]]) {
+		    return {cell:CCW[i+7]};
+		} else if (destOK[CCW[i+1]]) {
+		    return {cell:CCW[i+1]};
+		} else if (destOK[CCW[i+4]]) {
+		    return {cell:CCW[i+4]};
+		} else {
+		    return CELL_NOP;
+		}
+	    }
+	}
+    }
+    return (runQueenConfusedStrategy());
 }
 
 function runQueenConfusedStrategy() {
