@@ -477,7 +477,7 @@ function runQueenLightspeedStrategy() {
 	if ((artist != 0) &&
 	    (myFood >= THRESHOLDP[artist]) &&
 	    (adjFriends[artist] <= 1)) {
-	    var tc = [5, 6, 4, 3];
+	    var tc = [6, 2, 4, 5, 3];
 	    for (var i = 0; i < tc.length; i++) {
 		var c = CCW[compass+tc[i]];
 		if (destOK[c] &&
