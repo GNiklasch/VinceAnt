@@ -154,7 +154,7 @@ var foodTotal = 0;
 specTotal[myColor]++;
 
 // Inspect corner cells:
-for (i = 0; i < TOTAL_NBRS; i += 2) {
+for (var i = 0; i < TOTAL_NBRS; i += 2) {
     var cell = view[CCW[i]];
     specDiagonal[cell.color]++;
     specNbrs[cell.color]++;
@@ -170,7 +170,7 @@ for (i = 0; i < TOTAL_NBRS; i += 2) {
 }
 
 // Inspect edge cells:
-for (i = 1; i < TOTAL_NBRS; i += 2) {
+for (var i = 1; i < TOTAL_NBRS; i += 2) {
     var cell = view[CCW[i]];
     specLateral[cell.color]++;
     specNbrs[cell.color]++;
@@ -200,7 +200,7 @@ var foesTotal = 0;
 // We don't care much about enemy worker's types except as a source of entropy,
 // but we do occasionally care about enemy queens...
 
-for (i = 0; i < TOTAL_NBRS; i++) {
+for (var i = 0; i < TOTAL_NBRS; i++) {
     var cell = view[CCW[i]];
     if (cell.ant) {
 	if (cell.ant.friend) {
@@ -942,13 +942,13 @@ function runQueenScramblingAroundTactic() {
     }
     // Second attempt - look for the first neighbor cell that's white
     // or a foreign color, for variety turning clockwise:
-    for (i = TOTAL_NBRS - 1; i >= 0; i--) {
+    for (var i = TOTAL_NBRS - 1; i >= 0; i--) {
 	if (view[CCW[i]].color != LCL_TRAIL) {
 	    return {cell:CCW[i]};
 	}
     }
     // Meh, we're painted in.  Erase something that isn't our color:
-    for (i = 0; i < TOTAL_NBRS; i++) {
+    for (var i = 0; i < TOTAL_NBRS; i++) {
 	if (view[CCW[i]].color != LCL_TRAIL) {
 	    return {cell:CCW[i], color:LCL_CLEAR};
 	}
@@ -1000,7 +1000,7 @@ function runQueenScramblingEvasionTactic() {
 	    return {cell:CCW[compass]};
 	} else {
 	    // ...or aim in any unoccupied direction (if there is one).
-	    for (i = 0; i < TOTAL_NBRS; i++) {
+	    for (var i = 0; i < TOTAL_NBRS; i++) {
 		if (destOK[CCW[i]]) {
 		    return {cell:CCW[i]};
 		}
@@ -1016,13 +1016,13 @@ function runQueenScramblingEvasionTactic() {
 		return {cell:CCW[i+2]};
 	    }
 	}
-	for (i = 0; i < TOTAL_NBRS; i++) {
+	for (var i = 0; i < TOTAL_NBRS; i++) {
 	    if (destOK[CCW[i]] && destOK[CCW[i+1]] &&
 		destOK[CCW[i+2]]) {
 		return {cell:CCW[i+1]};
 	    }
 	}
-	for (i = 0; i < TOTAL_NBRS; i++) {
+	for (var i = 0; i < TOTAL_NBRS; i++) {
 	    if (destOK[CCW[i]]) {
 		return {cell:CCW[i]};
 	    }
