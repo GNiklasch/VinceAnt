@@ -1,5 +1,5 @@
 /*
- * GNi 2018-04-17
+ * GNi 2018-04-17 - 2018-04-25
 
 For background and context, see:
 https://codegolf.stackexchange.com/questions/135102/formic-functions-ant-queen-of-the-hill-contest
@@ -62,8 +62,6 @@ var LCL_TRAIL = COL_YELLOW;
 // Lightspeed communications when the navigator sees something the queen
 // cannot see:
 var LCL_LS_FOOD = COL_GREEN;
-
-// #### tbd
 
 // -- Addressing cells in the neighborhood: --
 
@@ -1259,11 +1257,6 @@ function runWanderingPainterTactic() {
 }
 
 // ---- Helper functions ----
-
-// Spectral analysis:
-
-// ####
-
 
 // console.log wrapper:
 function debugme(arg) {
