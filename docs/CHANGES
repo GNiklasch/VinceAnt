@@ -1,4 +1,9 @@
-### v1.01 2018-04-25 patch release
+## v1.02 2018-04-26 patch release
+
+### Bugfixes:
+0010 Disqualifying typo in a painter strategy
+
+## v1.01 2018-04-25 patch release
 
 ### Bugfixes:
 0009 Declare an undeclared variable (for use on strict-mode controllers)
