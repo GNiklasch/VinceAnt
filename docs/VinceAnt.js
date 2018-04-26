@@ -655,7 +655,7 @@ function runPaulPaintingStrategy() {
     // around an ANT_NAVIGATOR in the hope of being able to deliver food.
     if (adjLadenFriends[ANT_MARK] + adjLadenFriends[ANT_GEORGES] +
 	adjLadenFriends[ANT_WILLIAM] > 0) {
-	for (var i = 0; i < TOT_NBRS; i++) {
+	for (var i = 0; i < TOTAL_NBRS; i++) {
 	    if (view[CCW[i]].ant && view[CCW[i]].ant.friend &&
 		(view[CCW[i]].ant.food > 0)) {
 		if (destOK[CCW[i+4]]) {
